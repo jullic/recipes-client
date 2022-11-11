@@ -1,0 +1,12 @@
+{
+	"wordForReplace": "ENTEREDNAME",
+	"templatesPathFromRoot": [
+		"templater",
+		"templates"
+	],
+	"outputDirectoryPath": [
+		"src",
+		"components"
+	],
+	"ignoreExistingFiles": false
+}

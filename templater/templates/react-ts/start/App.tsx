@@ -1,3 +1,4 @@
+// @ts-nocheck //delete this line
 import React from 'react';
 
 function App() {

@@ -1,4 +1,4 @@
-import React, { FC, useRef } from 'react';
+import React, { ChangeEvent, FC, InputHTMLAttributes, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { ICreateProps } from './Create.props';
 import styles from './Create.module.css';
@@ -8,13 +8,31 @@ import { CreateIngridient } from '../../components/CreateIngridient/CreateIngrid
 import { CreateStep } from '../../components/CreateStep/CreateStep';
 import { Title } from '../../components/Title/Title';
 import { Button } from '../../components/Button/Button';
+import { axios } from '../../axios';
 
 export const Create: FC<ICreateProps> = ({ className, ...props }) => {
 
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const [imgLink, setImgLink] = useState<null | string>(null);
 
-	const onChangeImg = () => {
+	const onClickInput = () => {
 		fileInputRef.current?.click();
+	};
+
+	const onChangeImg = async (e: ChangeEvent<HTMLInputElement>) => {
+		console.log(e.target.files);
+		try {
+			const formData = new FormData();
+			if (e.target.files) {
+				const file = e.target.files[0]
+				formData.append('img', file);
+				const { data } = await axios.post('/uploads', formData);
+				console.log(data);
+				setImgLink('http://localhost:3300/' + data.path);
+			}
+		} catch (e) {
+
+		}
 	};
 
 	return (
@@ -22,9 +40,9 @@ export const Create: FC<ICreateProps> = ({ className, ...props }) => {
 			<div className="container">
 				<div className={styles.content}>
 					<input className={styles.title} type="text" placeholder='Название рецепта' />
-					<div onClick={onChangeImg} className={styles.img}>
-						<img src={Photo} alt="" />
-						<input ref={fileInputRef} type="file" accept='image/*' hidden />
+					<div onClick={onClickInput} className={styles.img}>
+						<img src={imgLink || Photo} alt="" />
+						<input onChange={onChangeImg} ref={fileInputRef} name='image' type="file" accept='image/*' hidden />
 					</div>
 					<div className={styles.info}>
 						<div className={styles.conuter}>

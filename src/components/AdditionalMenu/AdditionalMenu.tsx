@@ -7,6 +7,7 @@ import { Button } from '../Button/Button';
 import * as BoxIcon from '../../assets/img/box.svg';
 import * as EditIcon from '../../assets/img/edit.svg';
 import * as PlusIcon from '../../assets/img/plus.svg';
+import { Link } from 'react-router-dom';
 
 export const AdditionalMenu: FC<IAdditionalMenuProps> = ({ className, ...props }) => {
 
@@ -20,7 +21,7 @@ export const AdditionalMenu: FC<IAdditionalMenuProps> = ({ className, ...props }
 		<div className={classNames(styles.root, className)} {...props}>
 			<div className={classNames(styles.wrapper, { [styles.active]: isOpen })}>
 				<Button className={styles.circle} btnType='icon' color='white'><BoxIcon.ReactComponent /></Button>
-				<Button className={styles.circle} btnType='icon' color='white'><EditIcon.ReactComponent /></Button>
+				<Link className={styles.circle} to={'/create'}><Button btnType='icon' color='white'><EditIcon.ReactComponent /></Button></Link>
 				<Button onClick={onClick} className={styles.circle} btnType='icon' color='white'><PlusIcon.ReactComponent /></Button>
 			</div>
 		</div>

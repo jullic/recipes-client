@@ -4,7 +4,7 @@ import { IRecipesProps } from './Recipes.props';
 import styles from './Recipes.module.css';
 import { RecipeCard } from '../RecipeCard/RecipeCard';
 
-export const Recipes: FC<IRecipesProps> = ({ className, ...props }) => {
+export const Recipes: FC<IRecipesProps> = ({ className, recipes, ...props }) => {
 	return (
 		<div className={classNames(styles.root, className)} {...props}>
 			<RecipeCard />

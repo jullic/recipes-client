@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import classNames from 'classnames';
 import { IHeaderProps } from './Header.props';
 import styles from './Header.module.css';

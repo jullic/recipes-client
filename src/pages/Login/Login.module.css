@@ -1,0 +1,16 @@
+.root {}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	gap: 50px;
+}
+
+.btn {
+	width: min-content;
+	align-self: end;
+}
+
+.form {
+	align-self: center;
+}

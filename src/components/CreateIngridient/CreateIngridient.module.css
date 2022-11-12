@@ -18,16 +18,31 @@
 	margin: auto 0;
 }
 
+@media (max-width:768px) {
+	.root {
+		flex-direction: column;
+		gap: 30px;
+		justify-content: start;
+		align-items: start;
+	}
+}
+
 .wrap span {
 	position: absolute;
 	top: -20px;
 }
 
+.wrapp {
+	display: flex;
+	gap: 10px;
+}
+
 .ingr {
 	height: min-content;
 	border: none;
-	width: 100px;
-	/* max-width: 100%; */
+	width: 180px;
+	max-width: 100%;
+	background: none;
 }
 
 .select {
@@ -57,4 +72,6 @@
 	border: 2px solid var(--black-color);
 	height: 24px;
 	width: 24px;
+	min-height: 24px;
+	min-width: 24px;
 }

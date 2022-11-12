@@ -22,7 +22,7 @@ export const RecipeCard: FC<IRecipeCardProps> = ({ className, ...props }) => {
 				<div className={styles.wrapper}>
 					<div className={styles.header}>
 						<div className={styles.author}>Алкександр Львов</div>
-						<Button onClick={onClickHandler} className={classNames(styles.btn, {})} btnType='icon' color='primary'><BookmarkIcon.ReactComponent /></Button>
+						<Button onClick={onClickHandler} className={classNames(styles.btn)} btnType='icon' color='primary'><BookmarkIcon.ReactComponent /></Button>
 					</div>
 					<Title titleType='h3' className={styles.name}>Название рецепта</Title>
 					<div className={styles.footer}>

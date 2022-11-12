@@ -2,6 +2,13 @@
 	--black-color: #1D1D1F;
 	--primary-color: #EA5252;
 	--background-color: #FFFCF9;
+	--white-color: #FFF;
+	--gray-light: #EEE;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
 }
 
 input {
@@ -21,6 +28,10 @@ select {
 
 textarea {
 	font-family: 'Montserrat', sans-serif;
+}
+
+#root {
+	height: 100%;
 }
 
 html, body {

@@ -1,0 +1,21 @@
+.root {
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+.primary {}
+
+.bold {
+	font-weight: bold;
+}
+
+.ghost {
+	opacity: 0.6;
+}
+
+.small {
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 17px;
+}

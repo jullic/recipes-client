@@ -1,0 +1,51 @@
+.root {
+	position: fixed; 
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	right: 4%;
+	bottom: 50px;
+	width: 55px;
+	z-index: 10000;
+}
+
+.wrapper {
+	position: relative;
+	height: 55px;
+	transition: all 0.2s ease-in-out;
+}
+
+.wrapper.active > .circle:last-child {
+	transform: rotate(180deg);
+}
+
+.active {
+	height: 185px;
+}
+
+.circle {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 55px;
+	height: 55px;
+	background: var(--primary-color);
+	border-radius: 50%;
+}
+
+.circle:first-child {
+	top: 0px;
+}
+
+.circle:nth-child(2) {
+	top: 50%;
+	transform: translateY(-50%);
+	bottom: 0px;
+}
+
+.circle:last-child {
+	transition: all 0.2s ease-in-out;
+	bottom: 0px;
+}

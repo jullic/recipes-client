@@ -1,0 +1,33 @@
+.root {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	top: 100px;
+}
+
+.wrapper {
+	position: relative;
+}
+
+.input {
+	padding: 0 20px;
+	padding-right: 35px;
+	height: 35px;
+	font-size: 16px;
+	width: 100%;
+	min-width: 300px;
+	border: 2px solid var(--black-color);
+	border-radius: 20px;
+	background: none;
+}
+
+.btn {
+	cursor: pointer;
+	position: absolute;
+	font-size: 20px;
+	right: 15px;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+}

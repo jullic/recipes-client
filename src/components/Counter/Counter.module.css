@@ -1,0 +1,19 @@
+.root {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+
+.btn {
+	cursor: pointer;
+	background: none;
+	border: none;
+	font-size: 20px;
+	font-weight: 300;
+}
+
+.value {
+	font-weight: 700;
+	font-size: 24px;
+	line-height: 29px;
+}

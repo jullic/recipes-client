@@ -1,0 +1,42 @@
+.root {
+	width: 100%;
+}
+
+.wrap {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.name {
+	height: min-content;
+	border: none;
+	width: 20%;
+	min-width: 250px;
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 24px;
+}
+
+.del {
+	display: inline-block;
+	margin: auto 0;
+	padding: 0 !important;
+	border: 2px solid var(--black-color);
+	height: 24px;
+	width: 24px;
+}
+
+.text {
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 20px;
+	padding: 30px;
+	width: 100%;
+	height: 300px;
+	background: var(--white-color);
+	border: none;
+	box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.25);
+	border-radius: 50px;
+	resize: none;
+}

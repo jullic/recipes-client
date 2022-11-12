@@ -1,0 +1,55 @@
+.root {
+	background: none;
+	cursor: pointer;
+	border: none;
+}
+
+.icon {}
+
+.icon svg {
+	fill: rgba(0,0,0,0);
+	transition: all 0.15s ease-in-out;
+}
+
+.icon svg path {
+	stroke: inherit;
+}
+
+.icon.black svg {
+	stroke: var(--black-color);
+}
+
+.icon.black:hover svg{
+	fill: var(--black-color);
+}
+
+.icon.primary svg {
+	stroke: var(--primary-color);
+}
+
+.icon.primary:hover svg {
+	fill: var(--primary-color);
+}
+
+.icon.white svg {
+	stroke: var(--white-color);
+}
+
+.icon.white:hover svg {
+	fill: var(--white-color);
+}
+
+.text {
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+	padding: 10px 30px;
+	border: 2px solid var(--black-color);
+	border-radius: 20px;
+	transition: all 0.15s ease-in-out;
+}
+
+.text:hover {
+	background: var(--black-color);
+	color: var(--white-color);
+}

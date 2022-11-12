@@ -5,6 +5,6 @@ export const axios = axiosLib.create({
 });
 
 axios.interceptors.request.use((config: any) => {
-	config.headers.Authorization = window.localStorage.getItem('access_token');
+	config.headers.Authorization = `Bearer ${window.localStorage.getItem('access_token')}`;
 	return config;
-})
+});

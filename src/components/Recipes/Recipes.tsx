@@ -7,7 +7,7 @@ import { RecipeCard } from '../RecipeCard/RecipeCard';
 export const Recipes: FC<IRecipesProps> = ({ className, recipes, ...props }) => {
 	return (
 		<div className={classNames(styles.root, className)} {...props}>
-			<RecipeCard />
+			{recipes.map(recipe => <RecipeCard key={recipe._id} recipe={recipe} />)}
 		</div>
 	);
 }

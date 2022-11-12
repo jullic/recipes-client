@@ -5,7 +5,10 @@ import styles from './Ingredients.module.css';
 import { Title } from '../Title/Title';
 import { Counter } from '../Counter/Counter';
 
-export const Ingredients: FC<IIngredientsProps> = ({ className, ...props }) => {
+export const Ingredients: FC<IIngredientsProps> = ({ className, recipe, ...props }) => {
+
+	const { ingridients, portions } = recipe;
+
 
 	return (
 		<div className={classNames(styles.root, className)} {...props}>
@@ -13,15 +16,14 @@ export const Ingredients: FC<IIngredientsProps> = ({ className, ...props }) => {
 				<Title titleType='h2'>Ингридиенты</Title>
 				<div className={styles.counter}>
 					<span>Порции</span>
-					<Counter />
+					<Counter startValue={portions} />
 				</div>
 			</div>
 			<ul className={styles.list}>
-				<li className={styles.item}><span>Молоко</span> <span className={styles.line}></span> <span>100 мл.</span></li>
-				<li className={styles.item}><span>Молоко</span> <span className={styles.line}></span> <span>100 мл.</span></li>
-				<li className={styles.item}><span>Молоко</span> <span className={styles.line}></span> <span>100 мл.</span></li>
+				{ingridients.map(ingridient => (
+					<li key={ingridient.name + ingridient.quantity.value} className={styles.item}><span>{ingridient.name}</span> <span className={styles.line}></span> <span>{ingridient.quantity.value} {ingridient.quantity.unit}.</span></li>
+				))}
 			</ul>
-
 		</div>
 	);
 }

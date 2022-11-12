@@ -4,16 +4,30 @@ import { IProfileProps } from './Profile.props';
 import styles from './Profile.module.css';
 import { Text } from '../Text/Text';
 import { Button } from '../Button/Button';
+import { useAppDispatch } from '../../hooks/redux.hooks';
+import { logout } from '../../redux/slices/auth.slice';
+import { useNavigate } from 'react-router-dom';
 
-export const Profile: FC<IProfileProps> = ({ className, ...props }) => {
+export const Profile: FC<IProfileProps> = ({ className, user, ...props }) => {
+
+	const name = `${user.name} ${user.lastName}`;
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
+
+	const onLogout = () => {
+		if (window.confirm('Вы точно хотите выйти?')) {
+			dispatch(logout());
+			navigate('/login');
+		}
+	};
 
 	return (
 		<div className={classNames(styles.root, className)} {...props}>
 			<div className={styles.info}>
-				<Text>Александр Львов</Text>
-				<Text>iJullic@yandex.ru</Text>
+				<Text>{name}</Text>
+				<Text>{user.email}</Text>
 			</div>
-			<Button className={styles.btn} color='black'>Выйти</Button>
+			<Button onClick={onLogout} className={styles.btn} color='black'>Выйти</Button>
 		</div>
 	);
 }

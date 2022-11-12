@@ -12,14 +12,20 @@ import * as BookOpenIcon from '../../assets/img/bookOpen.svg';
 import * as UserIcon from '../../assets/img/user.svg';
 import * as LoginIcon from '../../assets/img/login.svg';
 import { SearchInput } from '../../components/SearchInput/SearchInput';
+import { useAppSelector } from '../../hooks/redux.hooks';
 
 export const Header: FC<IHeaderProps> = ({ className, ...props }) => {
 	const { pathname } = useLocation();
 	const [isSearch, setIsSearch] = useState(false);
 
+	const { access_token } = useAppSelector(state => state.auth);
+
 	const onSetSearchHandler = () => {
 		setIsSearch(prev => !prev);
 	}
+
+	console.log(access_token);
+
 
 	return (
 		<header className={classNames(styles.root, className)} {...props}>
@@ -35,14 +41,14 @@ export const Header: FC<IHeaderProps> = ({ className, ...props }) => {
 							[styles.active]: pathname.match(/\/my/)
 						})} btnType='icon'><BookOpenIcon.ReactComponent /></Button></Link>
 						{
-							// access_token ?
-							<Link to={'/profile'}><Button className={classNames(styles.button, {
-								[styles.active]: pathname.match(/\/profile/)
-							})} btnType='icon'><UserIcon.ReactComponent /></Button></Link>
-							// :
-							// <Link to={'/login'}><Button className={classNames(styles.button, {
-							// 	[styles.active]: pathname.match(/\/login/)
-							// })} btnType='icon'><LoginIcon.ReactComponent /></Button></Link>
+							access_token ?
+								<Link to={'/profile'}><Button className={classNames(styles.button, {
+									[styles.active]: pathname.match(/\/profile/)
+								})} btnType='icon'><UserIcon.ReactComponent /></Button></Link>
+								:
+								<Link to={'/login'}><Button className={classNames(styles.button, {
+									[styles.active]: pathname.match(/login|register/)
+								})} btnType='icon'><LoginIcon.ReactComponent /></Button></Link>
 						}
 
 					</div>

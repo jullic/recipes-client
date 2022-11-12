@@ -5,12 +5,21 @@ import styles from './Step.module.css';
 import { Title } from '../Title/Title';
 import { Text } from '../Text/Text';
 
-export const Step: FC<IStepProps> = ({ className, ...props }) => {
+export const Step: FC<IStepProps> = ({ className, recipe, ...props }) => {
+	const { steps } = recipe;
 
 	return (
 		<div className={classNames(styles.root, className)} {...props}>
-			<Title titleType='h2'>Шаг 1 – Название</Title>
-			<Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dictum id et viverra dignissim aliquam. Velit risus tortor arcu egestas. Orci enim ultrices quis faucibus orci, suspendisse. Tincidunt mi ut ac molestie ultrices nunc. Blandit posuere in neque, eu. Vitae mattis sed hendrerit nisi natoque at nulla id. Nisl felis orci nec risus amet proin.</Text>
+			<div className={styles.wrapper}>
+				{steps.map(step => {
+					return (
+						<div key={step.title} className={styles.step}>
+							<Title titleType='h2'>{step.title}</Title>
+							<Text>{step.description}</Text>
+						</div>
+					);
+				})}
+			</div>
 		</div>
 	);
 }

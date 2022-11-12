@@ -12,29 +12,36 @@ import * as KcalkIcon from '../../assets/img/kcal.svg';
 import * as GridIcon from '../../assets/img/grid.svg';
 
 
-export const RecipeHeader: FC<IRecipeHeaderProps> = ({ className, ...props }) => {
+export const RecipeHeader: FC<IRecipeHeaderProps> = ({ className, recipe, ...props }) => {
+	const { img, users, ingridients, kcal, time, name } = recipe;
+
+	console.log(recipe);
+
+
+	const userName = users ? `${users[0].name} ${users[0].lastName}` : 'Anonim'
+	const recipeTime = time ? `${time.value} ${time.unit ? time.unit : 'мин'}` : '10 мин';
 
 	return (
 		<div className={classNames(styles.root, className)} {...props}>
 			<div className={classNames(styles.img)}>
-				<img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80" alt="" />
+				<img src={img} alt="" />
 				<Button className={styles.btn} color='primary' btnType='icon'><BookmarkIcon.ReactComponent /></Button>
 			</div>
 			<div className={styles.info}>
-				<Title>Название рецепта</Title>
-				<Text>Алкександр Львов</Text>
+				<Title>{name}</Title>
+				<Text>{userName}</Text>
 				<div className={styles.items}>
 					<div className={styles.item}>
 						<ClockIcon.ReactComponent />
-						<span>20 мин</span>
+						<span>{recipeTime}</span>
 					</div>
 					<div className={styles.item}>
 						<KcalkIcon.ReactComponent />
-						<span>200 ккал</span>
+						<span>{kcal} ккал</span>
 					</div>
 					<div className={styles.item}>
 						<GridIcon.ReactComponent />
-						<span>10 ингридиентов</span>
+						<span>{ingridients.length} ингридиентов</span>
 					</div>
 				</div>
 			</div>

@@ -1,0 +1,55 @@
+.root {
+	padding: 15px 0;
+	border-top: 1px solid var(--gray-light);
+}
+
+.content {
+	display: flex;
+	align-items: center;
+	gap: 50px;
+}
+
+.name {
+	font-weight: 800;
+	font-size: 54px;
+	line-height: 66px;
+}
+
+.contacts {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.contact {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.contact a {
+	color: inherit;
+	text-decoration: none;
+	font-weight: 800;
+	font-size: 18px;
+	line-height: 22px;
+}
+
+.socials {
+	align-self: end;
+	margin-left: auto;
+	display: flex;
+	gap: 10px;
+}
+
+@media (max-width: 768px) {
+	.content {
+		flex-direction: column;
+		align-items: start;
+		gap: 15px;
+	}
+	.socials {
+		align-self: start;
+		margin-left: 0;
+	}
+}

@@ -1,0 +1,69 @@
+.root {
+	z-index: 100;
+	padding: 20px 0;
+	border-bottom: 1px solid var(--gray-light);
+}
+
+.content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.logo {
+	color: inherit;
+	text-decoration: none;
+}
+
+.btns {
+	display: flex;
+	gap: 20px;
+}
+
+.btn.active svg {
+	fill: var(--primary-color);
+}
+
+.btn.active:hover svg {
+	fill: var(--primary-color) !important;
+}
+
+.button.active svg {
+	fill: var(--primary-color) !important;
+}
+
+.input {
+	display: none;
+	transition: all 0.2s ease-in-out;
+	opacity: 0;
+}
+
+.input.active {
+	display: block;
+	visibility: visible;
+	animation: mount 0.2s ease-in-out forwards;
+}
+
+.input.unmount {
+	animation: unmount 0.2s ease-in-out forwards;
+}
+
+@keyframes mount {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes unmount {
+	0% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}

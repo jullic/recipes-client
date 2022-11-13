@@ -12,6 +12,11 @@
 	max-width: 100%;
 }
 
+.titleError {
+	font-size: 20px;
+	color: rgb(231, 39, 39)
+}
+
 .inputs {
 	display: flex;
 	flex-direction: column;

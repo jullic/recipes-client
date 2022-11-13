@@ -8,9 +8,12 @@ import { store } from './redux/store';
 
 import './index.css';
 import './styles/global.css';
+import { axios } from './axios';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
+
+// axios.post(`/auth/login`, { email: '12@ds.re', password: '1234566' }).catch(err => console.log(err));
 
 root.render(
 	<BrowserRouter>

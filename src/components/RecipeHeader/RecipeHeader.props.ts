@@ -1,3 +1,4 @@
+import { IIsFavorite } from './../../interfaces/recipes.interface';
 import { HTMLAttributes, DetailedHTMLProps } from 'react';
 import { IRecipe } from '../../interfaces/recipes.interface';
 

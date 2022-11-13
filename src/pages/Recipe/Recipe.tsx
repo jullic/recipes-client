@@ -23,7 +23,7 @@ const Recipe: FC<IRecipeProps> = ({ className, ...props }) => {
 		}
 	}, []);
 
-	if (!recipe) {
+	if (!recipe || recipe._id !== id) {
 		return <div className='container'>null</div>
 	}
 

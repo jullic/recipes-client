@@ -1,24 +1,35 @@
+import { IIsFavorite, IFavorite, IUser } from './../../interfaces/recipes.interface';
 import { axios } from './../../axios';
 import { RootState } from './../store';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { IRecipe } from '../../interfaces/recipes.interface';
 import qs from 'qs';
 
-export const fetchRecipes = createAsyncThunk<IRecipe[], { recipeName: string } | undefined>(
+export const fetchRecipes = createAsyncThunk<(IRecipe & IIsFavorite)[], { recipeName: string } | undefined>(
 	'recipes/fetchRecipes',
 	async (query, { getState }) => {
 		const state = getState() as RootState;
 		const queryString = qs.stringify({ page: state.recipes.page, limit: state.recipes.limit, recipeName: query?.recipeName });
 
-		const { data } = await axios.get<IRecipe[]>(`/recipes${queryString ? '?' + queryString : ''}`);
-		return data;
+		const allRecipes = (await axios.get<IRecipe[]>(`/recipes${queryString ? '?' + queryString : ''}`)).data;
+		if (!state.auth.access_token) {
+			return allRecipes.map(recipe => ({ ...recipe, isFavorite: false }));
+		}
+		const favorites = (await axios.get<IFavorite[]>('/recipes/favorite/user')).data
+		const recipes = allRecipes.map<IRecipe & IIsFavorite & { users: [IUser] }>((recipe) => {
+			return {
+				...recipe,
+				isFavorite: !!(favorites.find(favRecipe => favRecipe.recipeId === recipe._id))
+			}
+		});
+		return recipes;
 	}
 );
 
-export const fetchFavoriteRecipes = createAsyncThunk<IRecipe[], undefined>(
+export const fetchFavoriteRecipes = createAsyncThunk<IFavorite[], undefined>(
 	'recipes/fetchFavoriteRecipes',
 	async () => {
-		const { data } = await axios.get<IRecipe[]>(`recipes/favorite/user`);
+		const { data } = await axios.get<IFavorite[]>(`recipes/favorite/user`);
 		return data;
 	}
 );
@@ -33,9 +44,32 @@ export const fetchMyRecipes = createAsyncThunk<IRecipe[], undefined>(
 
 export const fetchOneRecipes = createAsyncThunk<IRecipe, { id: string }>(
 	'recipes/fetchOneRecipes',
+	async (params, { getState }) => {
+		const state = getState() as RootState;
+		const startRecipe = (await axios.get<Omit<IRecipe, 'isFavorite'>>(`recipes/${params.id}`)).data;
+		if (!state.auth.access_token) {
+			return { ...startRecipe, isFavorite: false };
+		}
+		const isFavorite = (await axios.get(`recipes/favorite/${startRecipe._id}`)).data;
+		return { ...startRecipe, isFavorite: !!(isFavorite) };
+	}
+);
+
+export const fetchAddToFavorite = createAsyncThunk<IFavorite, { recipeId: string }>(
+	'recipes/fetchAddToFavorite',
 	async (params) => {
-		const { data } = await axios.get<IRecipe>(`recipes/${params.id}`);
+		const { data } = await axios.post<IFavorite>(`recipes/favorite`, params);
+		console.log(data);
 		return data;
+	}
+);
+
+export const fetchRemoveFromFavorite = createAsyncThunk<{ recipeId: string }, { recipeId: string }>(
+	'recipes/fetchRemoveFromFavorite',
+	async (params) => {
+		const { data } = await axios.delete<IFavorite>(`recipes/favorite`, { data: params });
+		console.log(data);
+		return { recipeId: data.recipeId };
 	}
 );
 
@@ -85,7 +119,15 @@ const recipesSlice = createSlice({
 				state.status = 'loading';
 			})
 			.addCase(fetchFavoriteRecipes.fulfilled, (state, action) => {
-				state.recipes = [...state.recipes, ...action.payload];
+				state.recipes = [...state.recipes, ...action.payload.map(favorite => {
+					const recipe = {
+						...favorite.favorites[0],
+						isFavorite: true,
+						users: [favorite.users[0]]
+					} as IRecipe;
+					return recipe;
+				})];
+				console.log(state.recipes);
 				state.status = 'idle';
 			})
 			.addCase(fetchFavoriteRecipes.rejected, (state) => {
@@ -113,6 +155,47 @@ const recipesSlice = createSlice({
 				state.status = 'idle';
 			})
 			.addCase(fetchOneRecipes.rejected, (state) => {
+				state.status = 'error';
+			});
+
+		builder
+			.addCase(fetchAddToFavorite.pending, (state) => {
+				state.status = 'loading';
+			})
+			.addCase(fetchAddToFavorite.fulfilled, (state, action) => {
+				state.recipes = state.recipes.map(recipe => {
+					if (recipe._id === action.payload.recipeId) {
+						const obj = { ...action.payload.favorites[0], isFavorite: true, users: [action.payload.users[0]] } as IRecipe;
+						return obj;
+					}
+					return { ...recipe };
+				});
+				if (state.recipe?._id === action.payload.recipeId) {
+					state.recipe = { ...state.recipe, isFavorite: true };
+				}
+				state.status = 'idle';
+			})
+			.addCase(fetchAddToFavorite.rejected, (state) => {
+				state.status = 'error';
+			});
+
+		builder
+			.addCase(fetchRemoveFromFavorite.pending, (state) => {
+				state.status = 'loading';
+			})
+			.addCase(fetchRemoveFromFavorite.fulfilled, (state, action) => {
+				state.recipes = state.recipes.map(recipe => {
+					if (recipe._id === action.payload.recipeId) {
+						return { ...recipe, isFavorite: false };
+					}
+					return { ...recipe };
+				})
+				if (state.recipe?._id === action.payload.recipeId) {
+					state.recipe = { ...state.recipe, isFavorite: false };
+				}
+				state.status = 'idle';
+			})
+			.addCase(fetchRemoveFromFavorite.rejected, (state) => {
 				state.status = 'error';
 			});
 	}

@@ -24,9 +24,6 @@ export const Header: FC<IHeaderProps> = ({ className, ...props }) => {
 		setIsSearch(prev => !prev);
 	}
 
-	console.log(access_token);
-
-
 	return (
 		<header className={classNames(styles.root, className)} {...props}>
 			<div className="container">

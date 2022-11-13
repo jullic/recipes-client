@@ -42,7 +42,7 @@ export const Create: FC<ICreateProps> = ({ className, ...props }) => {
 
 	useEffect(() => {
 		if (!access_token) {
-			navigate('/');
+			navigate('/login');
 		}
 	}, []);
 

@@ -11,7 +11,7 @@ export interface IUser {
 	__v: number;
 }
 
-export interface IIngredient {
+export interface IIngridient {
 	name: string;
 	quantity: {
 		value: number;
@@ -24,16 +24,33 @@ export interface IStep {
 	description: string;
 }
 
-export interface IRecipe {
+export interface IIsFavorite {
+	isFavorite: boolean;
+}
+
+export interface IBaseRecipe {
 	_id: string;
 	name: string;
 	author: string;
 	img: string;
 	time: ITime;
 	kcal: number;
-	ingridients: IIngredient[];
+	ingridients: IIngridient[];
 	portions: number;
 	steps: IStep[];
 	__v: number;
-	users: IUser[];
+}
+
+export interface IRecipe extends IBaseRecipe {
+	users: [IUser];
+	isFavorite: boolean;
+}
+
+export interface IFavorite {
+	_id: string;
+	userId: string;
+	recipeId: string;
+	__v: number;
+	favorites: [IBaseRecipe];
+	users: [IUser];
 }

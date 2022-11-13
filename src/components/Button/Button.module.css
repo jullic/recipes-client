@@ -53,3 +53,14 @@
 	background: var(--black-color);
 	color: var(--white-color);
 }
+
+.root:disabled {
+	opacity: 0.5;
+	color: inherit;
+	cursor: not-allowed;
+}
+
+.root:disabled:hover {
+	background: inherit;
+	color: inherit;
+}

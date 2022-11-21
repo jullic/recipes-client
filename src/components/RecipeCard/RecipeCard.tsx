@@ -17,7 +17,7 @@ export const RecipeCard: FC<IRecipeCardProps> = ({ className, recipe, ...props }
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const { access_token } = useAppSelector(state => state.auth);
-	const { status } = useAppSelector(state => state.recipes);
+	const { recipeStatus } = useAppSelector(state => state.recipes);
 
 	const onClickHandler = (e: MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
@@ -42,7 +42,7 @@ export const RecipeCard: FC<IRecipeCardProps> = ({ className, recipe, ...props }
 				<div className={styles.wrapper}>
 					<div className={styles.header}>
 						<div className={styles.author}>{userName}</div>
-						<Button disabled={status === 'loading'} onClick={onClickHandler} className={classNames(styles.btn, { [styles.active]: isFavorite })} btnType='icon' color='primary'><BookmarkIcon.ReactComponent /></Button>
+						<Button disabled={recipeStatus === 'loading'} onClick={onClickHandler} className={classNames(styles.btn, { [styles.active]: isFavorite })} btnType='icon' color='primary'><BookmarkIcon.ReactComponent /></Button>
 					</div>
 					<Title titleType='h3' className={styles.name}>{name}</Title>
 					<div className={styles.footer}>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { IFavoritesProps } from './Favorites.props';
 import styles from './Favorites.module.css';
@@ -13,6 +13,8 @@ const Favorites: FC<IFavoritesProps> = ({ className, ...props }) => {
 
 	const { recipes } = useAppSelector(state => state.recipes);
 	const { access_token } = useAppSelector(state => state.auth);
+	const recipesRef = useRef<HTMLDivElement>(null);
+
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 

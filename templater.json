@@ -1,1 +1,7 @@
-{"schemaPath":["templater","schemas","react-ts.schema.json"]}
+{
+	"schemaPath": [
+		"templater",
+		"schemas",
+		"react-ts.schema.json"
+	]
+}

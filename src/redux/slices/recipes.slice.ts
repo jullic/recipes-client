@@ -1,4 +1,4 @@
-import { IIsFavorite, IFavorite, IUser } from './../../interfaces/recipes.interface';
+import { IIsFavorite, IFavorite, IUser, IBaseRecipe } from './../../interfaces/recipes.interface';
 import { axios } from './../../axios';
 import { RootState } from './../store';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
@@ -10,7 +10,6 @@ export const fetchRecipes = createAsyncThunk<(IRecipe & IIsFavorite)[], { recipe
 	async (query, { getState }) => {
 		const state = getState() as RootState;
 		const queryString = qs.stringify({ page: state.recipes.page, limit: state.recipes.limit, recipeName: query?.recipeName });
-
 		const allRecipes = (await axios.get<IRecipe[]>(`/recipes${queryString ? '?' + queryString : ''}`)).data;
 		if (!state.auth.access_token) {
 			return allRecipes.map(recipe => ({ ...recipe, isFavorite: false }));
@@ -26,6 +25,14 @@ export const fetchRecipes = createAsyncThunk<(IRecipe & IIsFavorite)[], { recipe
 	}
 );
 
+export const fetchMaxPage = createAsyncThunk<number, undefined>(
+	'recipes/fetchMaxPage',
+	async () => {
+		const { data } = await axios.get<number>(`recipes/pages`);
+		return data;
+	}
+);
+
 export const fetchFavoriteRecipes = createAsyncThunk<IFavorite[], undefined>(
 	'recipes/fetchFavoriteRecipes',
 	async () => {
@@ -36,9 +43,23 @@ export const fetchFavoriteRecipes = createAsyncThunk<IFavorite[], undefined>(
 
 export const fetchMyRecipes = createAsyncThunk<IRecipe[], undefined>(
 	'recipes/fetchMyRecipes',
-	async () => {
+	async (_, { getState }) => {
+		const state = getState() as RootState;
 		const { data } = await axios.get<IRecipe[]>(`recipes/user`);
-		return data;
+		if (!state.auth.access_token) {
+			return data;
+		}
+		const favorites = (await axios.get<IFavorite[]>('recipes/favorite/user')).data;
+
+		return data.map(recipe => {
+			let data = recipe;
+			favorites.forEach(favorite => {
+				if (data._id === favorite.recipeId) {
+					data = { ...data, isFavorite: true };
+				}
+			});
+			return data;
+		});
 	}
 );
 
@@ -73,6 +94,14 @@ export const fetchRemoveFromFavorite = createAsyncThunk<{ recipeId: string }, { 
 	}
 );
 
+export const fetchCreateRecipe = createAsyncThunk<IBaseRecipe, Omit<IBaseRecipe, '_id' | '_v' | 'author'>>(
+	'create/fetchCreateRecipe',
+	async (params) => {
+		const createdRecipe = (await axios.post<IBaseRecipe>('recipes', params)).data;
+		return createdRecipe;
+	}
+);
+
 interface IInitialState {
 	recipes: IRecipe[];
 	page: number;
@@ -80,6 +109,7 @@ interface IInitialState {
 	maxPage: number,
 	status: 'idle' | 'loading' | 'error';
 	recipe: IRecipe | null;
+	recipeStatus: 'idle' | 'loading' | 'error';
 }
 
 const initialState: IInitialState = {
@@ -89,6 +119,7 @@ const initialState: IInitialState = {
 	limit: 6,
 	status: 'idle',
 	recipe: null,
+	recipeStatus: 'idle'
 };
 
 const recipesSlice = createSlice({
@@ -98,7 +129,7 @@ const recipesSlice = createSlice({
 		clearRecipes(state) {
 			state.page = 1;
 			state.recipes = [];
-		}
+		},
 	},
 	extraReducers(builder) {
 		builder
@@ -119,6 +150,7 @@ const recipesSlice = createSlice({
 				state.status = 'loading';
 			})
 			.addCase(fetchFavoriteRecipes.fulfilled, (state, action) => {
+
 				state.recipes = [...state.recipes, ...action.payload.map(favorite => {
 					const recipe = {
 						...favorite.favorites[0],
@@ -147,6 +179,12 @@ const recipesSlice = createSlice({
 			});
 
 		builder
+			.addCase(fetchMaxPage.fulfilled, (state, action) => {
+				state.maxPage = action.payload;
+				state.status = 'idle';
+			})
+
+		builder
 			.addCase(fetchOneRecipes.pending, (state) => {
 				state.status = 'loading';
 			})
@@ -160,7 +198,7 @@ const recipesSlice = createSlice({
 
 		builder
 			.addCase(fetchAddToFavorite.pending, (state) => {
-				state.status = 'loading';
+				state.recipeStatus = 'loading';
 			})
 			.addCase(fetchAddToFavorite.fulfilled, (state, action) => {
 				state.recipes = state.recipes.map(recipe => {
@@ -173,15 +211,15 @@ const recipesSlice = createSlice({
 				if (state.recipe?._id === action.payload.recipeId) {
 					state.recipe = { ...state.recipe, isFavorite: true };
 				}
-				state.status = 'idle';
+				state.recipeStatus = 'idle';
 			})
 			.addCase(fetchAddToFavorite.rejected, (state) => {
-				state.status = 'error';
+				state.recipeStatus = 'error';
 			});
 
 		builder
 			.addCase(fetchRemoveFromFavorite.pending, (state) => {
-				state.status = 'loading';
+				state.recipeStatus = 'loading';
 			})
 			.addCase(fetchRemoveFromFavorite.fulfilled, (state, action) => {
 				state.recipes = state.recipes.map(recipe => {
@@ -193,10 +231,10 @@ const recipesSlice = createSlice({
 				if (state.recipe?._id === action.payload.recipeId) {
 					state.recipe = { ...state.recipe, isFavorite: false };
 				}
-				state.status = 'idle';
+				state.recipeStatus = 'idle';
 			})
 			.addCase(fetchRemoveFromFavorite.rejected, (state) => {
-				state.status = 'error';
+				state.recipeStatus = 'error';
 			});
 	}
 });

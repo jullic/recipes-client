@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import classNames from 'classnames';
 import { IIngredientsProps } from './Ingredients.props';
 import styles from './Ingredients.module.css';
@@ -8,7 +8,11 @@ import { Counter } from '../Counter/Counter';
 export const Ingredients: FC<IIngredientsProps> = ({ className, recipe, ...props }) => {
 
 	const { ingridients, portions } = recipe;
+	const [value, setValue] = useState(portions);
 
+	const onUpdatePortinos = (operator: '+' | '-') => {
+		setValue(prev => operator === '+' ? prev + 1 : prev - 1);
+	}
 
 	return (
 		<div className={classNames(styles.root, className)} {...props}>
@@ -16,7 +20,7 @@ export const Ingredients: FC<IIngredientsProps> = ({ className, recipe, ...props
 				<Title titleType='h2'>Ингридиенты</Title>
 				<div className={styles.counter}>
 					<span>Порции</span>
-					<Counter startValue={portions} />
+					<Counter startValue={value} onUpdateValue={onUpdatePortinos} />
 				</div>
 			</div>
 			<ul className={styles.list}>

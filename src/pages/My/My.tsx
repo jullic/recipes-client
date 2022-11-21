@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { IMyProps } from './My.props';
 import styles from './My.module.css';
@@ -16,6 +16,9 @@ const My: FC<IMyProps> = ({ className, ...props }) => {
 	const { access_token } = useAppSelector(state => state.auth);
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+
+	const recipesRef = useRef<HTMLDivElement>(null);
+
 
 	useEffect(() => {
 		if (!access_token) {

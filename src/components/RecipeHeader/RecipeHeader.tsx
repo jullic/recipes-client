@@ -24,7 +24,7 @@ export const RecipeHeader: FC<IRecipeHeaderProps> = ({ className, recipe, ...pro
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const { access_token } = useAppSelector(state => state.auth);
-	const { status } = useAppSelector(state => state.recipes);
+	const { recipeStatus } = useAppSelector(state => state.recipes);
 
 	const onClickHandler = (e: MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
@@ -43,7 +43,7 @@ export const RecipeHeader: FC<IRecipeHeaderProps> = ({ className, recipe, ...pro
 		<div className={classNames(styles.root, className)} {...props}>
 			<div className={classNames(styles.img)}>
 				<img src={img} alt="" />
-				<Button disabled={status === 'loading'} onClick={onClickHandler} className={classNames(styles.btn, { [styles.active]: isFavorite })} color='primary' btnType='icon'><BookmarkIcon.ReactComponent /></Button>
+				<Button disabled={recipeStatus === 'loading'} onClick={onClickHandler} className={classNames(styles.btn, { [styles.active]: isFavorite })} color='primary' btnType='icon'><BookmarkIcon.ReactComponent /></Button>
 			</div>
 			<div className={styles.info}>
 				<Title>{name}</Title>
